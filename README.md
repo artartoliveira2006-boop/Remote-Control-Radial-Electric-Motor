@@ -30,6 +30,9 @@ Uma tarefa separada do ESP32 consulta, a cada 10 segundos, o arquivo público [`
 ```text
 .
 |-- cad/
+|   |-- bobina.stl
+|   |-- encapsulamento-direito.stl
+|   |-- encapsulamento-esquerdo.stl
 |   `-- README.md
 |-- docs/
 |   `-- README.md
@@ -110,7 +113,7 @@ Faça os primeiros testes com alimentação limitada, uma bobina por vez e possi
 - [Sketch no Arduino Cloud](https://app.arduino.cc/sketches/5fc2e5a7-c3c3-415b-b562-e2339e4dc90b?view-mode=preview)
 - [Circuito no Tinkercad](https://www.tinkercad.com/things/hriccYSg3r2-dazzling-gaaris-fulffy/editel?sharecode=ODh7P4tV9Ig7Nv-Jada4wmx27EI8rfMsCgkdmTvJzwE)
 - [Documentação disponível e pendências](docs/README.md)
-- [Modelo CAD e pendências](cad/README.md)
+- [Modelos STL para fabricação 3D](cad/README.md)
 - [Fotos, vídeos e identificação do material](media/README.md)
 
 ## Autoria e contexto acadêmico
@@ -119,7 +122,7 @@ O protótipo foi desenvolvido por Arthur Artiaga Oliveira e um colega durante o 
 
 ## English summary
 
-This repository documents a custom five-phase radial electric motor controlled by an ESP32-class board. Five coils are driven in a star-like modular sequence, with an exponential acceleration ramp and a simple GitHub-hosted remote command. The repository includes sanitized firmware and structured placeholders for the circuit, CAD model, academic report, photos and test videos.
+This repository documents a custom five-phase radial electric motor controlled by an ESP32-class board. Five coils are driven in a star-like modular sequence, with an exponential acceleration ramp and a simple GitHub-hosted remote command. The repository includes sanitized firmware, printable STL meshes, photos, test videos and structured documentation for the circuit and academic report.
 
 ## Licença
 
