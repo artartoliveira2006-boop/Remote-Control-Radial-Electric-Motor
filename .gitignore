@@ -1,0 +1,13 @@
+# Credenciais locais do Arduino
+firmware/MotorRadial/arduino_secrets.h
+
+# Artefatos de compilacao
+build/
+*.bin
+*.elf
+*.map
+
+# Arquivos do sistema e IDE
+.DS_Store
+Thumbs.db
+.vscode/
