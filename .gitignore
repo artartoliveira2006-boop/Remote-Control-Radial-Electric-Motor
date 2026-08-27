@@ -6,6 +6,12 @@ build/
 *.bin
 *.elf
 *.map
+*.aux
+*.lof
+*.log
+*.out
+*.toc
+tmp/
 
 # Arquivos do sistema e IDE
 .DS_Store

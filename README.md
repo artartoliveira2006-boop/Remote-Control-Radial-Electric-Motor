@@ -35,6 +35,8 @@ Uma tarefa separada do ESP32 consulta, a cada 10 segundos, o arquivo público [`
 |   |-- encapsulamento-esquerdo.stl
 |   `-- README.md
 |-- docs/
+|   |-- relatorio/
+|   |   `-- Motor_Radial_Relatorio_Revisado.tex
 |   `-- README.md
 |-- firmware/
 |   `-- MotorRadial/
@@ -47,6 +49,9 @@ Uma tarefa separada do ESP32 consulta, a cada 10 segundos, o arquivo público [`
 |-- hardware/
 |   `-- README.md
 |-- media/
+|   |-- inspiracao/
+|   |   |-- campo-magnetico-solenoide.png
+|   |   `-- motor-radial-fiat-a50.jpg
 |   |-- apresentacao-01.jpeg
 |   |-- apresentacao-02.jpeg
 |   |-- apresentacao-03.jpeg
@@ -56,6 +61,8 @@ Uma tarefa separada do ESP32 consulta, a cada 10 segundos, o arquivo público [`
 |   |-- demonstracao-03.mp4
 |   |-- demonstracao-04.mp4
 |   `-- README.md
+|-- output/pdf/
+|   `-- Motor_Radial_Relatorio_Revisado.pdf
 |-- .gitignore
 |-- commands.txt
 `-- README.md
@@ -112,13 +119,14 @@ Faça os primeiros testes com alimentação limitada, uma bobina por vez e possi
 
 - [Sketch no Arduino Cloud](https://app.arduino.cc/sketches/5fc2e5a7-c3c3-415b-b562-e2339e4dc90b?view-mode=preview)
 - [Circuito no Tinkercad](https://www.tinkercad.com/things/hriccYSg3r2-dazzling-gaaris-fulffy/editel?sharecode=ODh7P4tV9Ig7Nv-Jada4wmx27EI8rfMsCgkdmTvJzwE)
-- [Documentação disponível e pendências](docs/README.md)
+- [Relatório acadêmico revisado em PDF](output/pdf/Motor_Radial_Relatorio_Revisado.pdf)
+- [Fonte LaTeX e instruções de compilação](docs/README.md)
 - [Modelos STL para fabricação 3D](cad/README.md)
 - [Fotos, vídeos e identificação do material](media/README.md)
 
 ## Autoria e contexto acadêmico
 
-O protótipo foi desenvolvido por Arthur Artiaga Oliveira e um colega durante o primeiro semestre de Engenharia Elétrica, como atividade prática de aprendizagem interdisciplinar. O nome do segundo integrante, a instituição, a disciplina, o professor e o ano da apresentação serão acrescentados quando forem confirmados pelo artigo ou pela equipe.
+O protótipo foi desenvolvido por Arthur Artiaga Oliveira, Matheus Chacon de Moura, Miguel Resende de Faria Silva, Pedro Henrique Rodrigues Meireles e Rafael Valero Borges Alecrim, no curso de Engenharia Elétrica da PUC Minas, como atividade da disciplina Desafio de Engenharia Elétrica I, ministrada pela professora Viviane Reis de Carvalho, em 2026.
 
 ## English summary
 

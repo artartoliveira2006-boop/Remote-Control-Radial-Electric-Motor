@@ -1,0 +1,529 @@
+\documentclass[12pt,a4paper,oneside]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[english,brazilian]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{url}
+
+\geometry{top=2.5cm,bottom=2.2cm,left=3cm,right=2cm,headheight=24pt}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+\onehalfspacing
+\emergencystretch=2em
+
+\definecolor{navy}{HTML}{15324A}
+\definecolor{blue}{HTML}{247BA0}
+\definecolor{cyan}{HTML}{5BC0BE}
+\definecolor{pale}{HTML}{EAF4F7}
+\definecolor{orange}{HTML}{F28F3B}
+\definecolor{dark}{HTML}{202A33}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=navy,
+  urlcolor=blue,
+  citecolor=navy,
+  pdftitle={Motor radial elétrico experimental de cinco atuadores},
+  pdfauthor={Arthur Artiaga Oliveira; Matheus Chacon de Moura; Miguel Resende de Faria Silva; Pedro Henrique Rodrigues Meireles; Rafael Valero Borges Alecrim}
+}
+
+\titleformat{\section}{\normalfont\Large\bfseries\color{navy}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{blue}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{dark}}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.5em}{0.7em}
+\titlespacing*{\subsection}{0pt}{1.1em}{0.5em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{navy} MOTOR RADIAL ELÉTRICO EXPERIMENTAL}
+\fancyhead[R]{\footnotesize\color{gray} PUC MINAS}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{cyan}\leaders\hrule height \headrulewidth\hfill}}
+
+\captionsetup{font=small,labelfont=bf,textfont=it,justification=centering}
+\setlist[itemize]{leftmargin=1.2cm,itemsep=0.2em,topsep=0.4em}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\renewcommand{\refname}{REFERÊNCIAS}
+\newcommand{\source}[1]{\par\centering\footnotesize\itshape Fonte: #1\par}
+\newcommand{\warningbox}[1]{%
+  \begin{center}
+  \colorbox{pale}{\parbox{0.92\textwidth}{\color{navy}\small #1}}
+  \end{center}
+}
+
+\begin{document}
+\hypersetup{pageanchor=false}
+
+% Capa
+\begin{titlepage}
+  \pagecolor{navy}\color{white}
+  \noindent {\large INSTITUTO POLITÉCNICO - PUC MINAS}\\[0.25cm]
+  {\large CURSO DE ENGENHARIA ELÉTRICA}
+
+  \vspace{3.2cm}
+  {\fontsize{25}{31}\selectfont\bfseries
+  DESENVOLVIMENTO DE UM MOTOR RADIAL ELÉTRICO EXPERIMENTAL DE CINCO ATUADORES\par}
+
+  \vspace{0.8cm}
+  {\color{orange}\rule{0.48\textwidth}{2.2pt}}\\[0.8cm]
+  {\large Controle embarcado, fabricação aditiva e investigação de resfriamento líquido}
+
+  \vfill
+  {\normalsize
+  Arthur Artiaga Oliveira\\
+  Matheus Chacon de Moura\\
+  Miguel Resende de Faria Silva\\
+  Pedro Henrique Rodrigues Meireles\\
+  Rafael Valero Borges Alecrim}
+
+  \vspace{1.2cm}
+  {\normalsize Belo Horizonte - MG\\2026}
+\end{titlepage}
+\nopagecolor\color{dark}
+
+% Folha de rosto, seguindo a estrutura do relatório de referência
+\begin{titlepage}
+  \begin{center}
+    {\normalsize
+    Arthur Artiaga Oliveira\\
+    Matheus Chacon de Moura\\
+    Miguel Resende de Faria Silva\\
+    Pedro Henrique Rodrigues Meireles\\
+    Rafael Valero Borges Alecrim}
+
+    \vspace{3.2cm}
+    {\Large\bfseries DESENVOLVIMENTO DE UM MOTOR RADIAL ELÉTRICO EXPERIMENTAL DE CINCO ATUADORES\par}
+  \end{center}
+
+  \vspace{3.2cm}
+  \hfill\begin{minipage}{0.52\textwidth}
+    Trabalho apresentado ao Curso de Engenharia Elétrica da Pontifícia Universidade Católica de Minas Gerais, no âmbito da disciplina Desafio de Engenharia Elétrica I.
+
+    \vspace{0.5cm}
+    Professora: Viviane Reis de Carvalho.
+  \end{minipage}
+
+  \vfill
+  \begin{center}
+    Belo Horizonte - MG\\
+    2026
+  \end{center}
+\end{titlepage}
+
+\hypersetup{pageanchor=true}
+\pagenumbering{roman}
+
+\section*{RESUMO}
+\addcontentsline{toc}{section}{Resumo}
+Este relatório descreve o desenvolvimento de um protótipo didático de motor radial elétrico com cinco atuadores eletromagnéticos dispostos em estrela. A estrutura combina peças impressas em 3D, base de madeira e componentes metálicos reaproveitados. Um microcontrolador ESP32 executa o acionamento sequencial das bobinas por intermédio de um estágio ULN2003 e consulta, via Wi-Fi, um comando textual hospedado no GitHub. O firmware implementa duas ordens de comutação, teste individual dos atuadores e redução progressiva do intervalo entre passos. As demonstrações registradas confirmam qualitativamente a energização das bobinas e o movimento do conjunto; entretanto, não foram disponibilizadas medições instrumentais de rotação, torque, corrente ou temperatura. Por esse motivo, o desempenho e a efetividade do resfriamento líquido são tratados como aspectos ainda sujeitos a validação experimental. O trabalho evidencia a integração entre eletromagnetismo, sistemas embarcados, fabricação aditiva e reaproveitamento de materiais, além de estabelecer uma base documentada para ensaios futuros.
+
+\noindent\textbf{Palavras-chave:} motor radial; eletromagnetismo; ESP32; ULN2003; fabricação aditiva; protótipo didático.
+\clearpage
+
+\selectlanguage{english}
+\section*{ABSTRACT}
+\addcontentsline{toc}{section}{Abstract}
+This report describes the development of a didactic radial electric motor prototype with five electromagnetic actuators arranged in a star pattern. Its structure combines 3D-printed parts, a wooden base and reused metallic components. An ESP32 microcontroller sequentially drives the coils through a ULN2003 stage and checks a text command hosted on GitHub over Wi-Fi. The firmware provides two switching orders, individual actuator testing and a progressive reduction of the interval between steps. Available demonstrations qualitatively confirm coil energization and motion of the assembly; however, no instrumented measurements of speed, torque, current or temperature were available. Performance and liquid-cooling effectiveness are therefore identified as subjects for future experimental validation. The project integrates electromagnetism, embedded systems, additive manufacturing and material reuse while establishing a documented baseline for further testing.
+
+\noindent\textbf{Keywords:} radial motor; electromagnetism; ESP32; ULN2003; additive manufacturing; educational prototype.
+\selectlanguage{brazilian}
+\clearpage
+
+\listoffigures
+\addcontentsline{toc}{section}{Lista de figuras}
+\clearpage
+
+\section*{LISTA DE SIGLAS E ABREVIATURAS}
+\addcontentsline{toc}{section}{Lista de siglas e abreviaturas}
+\begin{tabularx}{\textwidth}{>{\bfseries}l Y}
+CAD & Computer-Aided Design (projeto auxiliado por computador)\\
+ESP32 & Família de microcontroladores com conectividade sem fio da Espressif\\
+FreeRTOS & Sistema operacional de tempo real usado pelo firmware\\
+GPIO & General-Purpose Input/Output (entrada e saída de uso geral)\\
+HTTP & Hypertext Transfer Protocol\\
+IoT & Internet of Things (Internet das Coisas)\\
+RPM & Rotações por minuto\\
+STL & Formato de malha empregado na fabricação aditiva\\
+Wi-Fi & Tecnologia de comunicação em rede sem fio\\
+\end{tabularx}
+\clearpage
+
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+
+\section{INTRODUÇÃO}
+
+Motores elétricos convertem energia elétrica em energia mecânica por meio da interação entre campos magnéticos. No protótipo estudado, essa conversão é explorada em uma arquitetura inspirada visualmente nos motores radiais: cinco eletroímãs são distribuídos ao redor de um conjunto móvel central e acionados em sequência.
+
+A proposta foi desenvolvida no primeiro semestre do curso de Engenharia Elétrica como exercício interdisciplinar. Além da montagem eletromecânica, o trabalho reuniu modelagem CAD, impressão 3D, programação embarcada, comunicação em rede e reaproveitamento de materiais. O resultado deve ser compreendido como protótipo experimental e didático, não como máquina elétrica caracterizada para operação contínua.
+
+\warningbox{Esta versão revisada separa fatos documentados de hipóteses e observações. Afirmações quantitativas sobre eficiência, torque, velocidade ou desempenho térmico somente poderão ser feitas após ensaios instrumentados.}
+
+\subsection{Problemática e justificativa}
+
+O desafio consistiu em produzir movimento rotativo a partir do acionamento coordenado de cinco bobinas, usando uma estrutura de baixo custo e um controlador programável. O aquecimento por efeito Joule motivou também a incorporação de passagens para circulação de água nos encapsulamentos das bobinas, conceito que requer validação térmica posterior.
+
+A documentação técnica é parte do problema de engenharia. Sem o registro de pinagem, lógica de controle, modelos de fabricação e limitações dos ensaios, torna-se difícil reproduzir o protótipo ou comparar futuras alterações. Assim, este relatório reúne o estado conhecido do sistema e explicita os dados que ainda precisam ser medidos.
+
+\subsection{Referências visuais e conceituais}
+
+A organização em estrela foi inspirada na leitura visual dos motores radiais aeronáuticos, nos quais os cilindros se distribuem ao redor de um eixo central. A semelhança é geométrica: o protótipo elétrico não reproduz combustão interna, bielas articuladas ou o ciclo termodinâmico dessas máquinas.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.56\textwidth]{media/inspiracao/motor-radial-fiat-a50.jpg}
+  \caption{Motor aeronáutico radial Fiat A.50 seccionado, referência para a disposição em estrela.}
+  \source{MLWatts, Wikimedia Commons, 2012, licença CC BY-SA 3.0.}
+\end{figure}
+
+O princípio de atuação, por sua vez, vem do campo magnético produzido por uma bobina energizada. A Figura~\ref{fig:solenoide} é conceitual e não representa a geometria exata dos atuadores construídos.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.78\textwidth]{media/inspiracao/campo-magnetico-solenoide.png}
+  \caption{Representação aproximada das linhas de campo de um solenoide.}
+  \label{fig:solenoide}
+  \source{Nuno Nogueira, Wikimedia Commons, domínio público.}
+\end{figure}
+
+\subsection{Objetivos}
+
+\subsubsection{Objetivo geral}
+
+Projetar, construir e demonstrar um protótipo de motor radial elétrico com cinco atuadores, controle embarcado e componentes produzidos por fabricação aditiva.
+
+\subsubsection{Objetivos específicos}
+
+\begin{itemize}
+  \item modelar e fabricar suportes e encapsulamentos por impressão 3D;
+  \item construir e testar cinco bobinas eletromagnéticas;
+  \item implementar o acionamento sequencial por ESP32 e ULN2003;
+  \item permitir habilitação remota por consulta a um comando hospedado no GitHub;
+  \item investigar uma solução de circulação de água para remoção de calor;
+  \item documentar limitações e definir ensaios para a continuidade do projeto.
+\end{itemize}
+
+\section{REFERENCIAL TEÓRICO}
+
+\subsection{Eletromagnetismo e atuação}
+
+A corrente elétrica que percorre uma bobina produz um campo magnético. Quando o atuador é energizado, esse campo exerce força sobre o elemento ferromagnético associado ao mecanismo móvel. A repetição ordenada das atrações produz deslocamentos angulares sucessivos. A intensidade da força depende, entre outros fatores, da corrente, do número de espiras, da geometria do núcleo e do entreferro \cite{halliday,fitzgerald}.
+
+\subsection{Aquecimento por efeito Joule}
+
+A dissipação elétrica em uma bobina pode ser estimada por
+\begin{equation}
+  P = R I^2,
+\end{equation}
+em que $P$ é a potência dissipada, $R$ é a resistência do enrolamento e $I$ é a corrente. Como o aquecimento varia com o quadrado da corrente, a caracterização elétrica e térmica é essencial antes de aumentar o tempo de energização ou a tensão de alimentação.
+
+\subsection{Controle embarcado e estágio de potência}
+
+Os pinos do ESP32 fornecem sinais lógicos e não devem alimentar bobinas diretamente. O ULN2003 reúne transistores Darlington usados como chaves de baixa tensão, permitindo que os sinais do microcontrolador comandem cargas ligadas a uma fonte externa \cite{tiuln}. O retorno de corrente, a conexão comum dos diodos internos, o aterramento compartilhado e os limites elétricos do componente precisam ser respeitados na montagem.
+
+\begin{figure}[H]
+  \centering
+  \setlength{\fboxsep}{8pt}
+  \fbox{Comando remoto GitHub}
+  $\longrightarrow$
+  \fbox{ESP32 + Wi-Fi}
+  $\longrightarrow$
+  \fbox{ULN2003}
+  $\longrightarrow$
+  \fbox{5 bobinas}
+  \caption{Arquitetura funcional documentada do protótipo.}
+  \source{Elaboração própria.}
+\end{figure}
+
+\subsection{Configuração radial}
+
+Nos motores aeronáuticos radiais, cilindros são distribuídos ao redor de um eixo comum. Neste trabalho, a configuração foi reinterpretada como disposição de cinco atuadores eletromagnéticos em estrela. A comparação orienta a forma do conjunto, mas não implica equivalência entre os princípios de conversão de energia.
+
+\section{METODOLOGIA E DESENVOLVIMENTO}
+
+\subsection{Fluxo de atividades}
+
+O desenvolvimento foi conduzido em etapas interdependentes:
+\begin{enumerate}[leftmargin=1.4cm]
+  \item definição da configuração radial e modelagem das peças;
+  \item impressão dos suportes e encapsulamentos;
+  \item construção dos enrolamentos e montagem dos elementos ferromagnéticos;
+  \item integração mecânica sobre a base de madeira;
+  \item montagem do ESP32 e do estágio ULN2003;
+  \item desenvolvimento e compilação do firmware;
+  \item teste individual das cinco saídas;
+  \item execução da sequência e registro da demonstração.
+\end{enumerate}
+
+\subsection{Componentes utilizados}
+
+\begin{table}[H]
+\centering
+\caption{Componentes identificados na documentação disponível.}
+\begin{tabularx}{\textwidth}{>{\bfseries}p{4.2cm}Y}
+\toprule
+Componente & Função no protótipo\\
+\midrule
+ESP32 & Sequenciamento das bobinas e consulta ao comando remoto por Wi-Fi.\\
+ULN2003 & Chaveamento das cargas a partir dos sinais lógicos do ESP32.\\
+Cinco bobinas & Produção dos campos magnéticos de atuação.\\
+Fonte externa & Alimentação do estágio de potência e dos enrolamentos.\\
+Peças impressas em 3D & Suporte das bobinas e encapsulamento com passagens para água.\\
+Base de madeira & Sustentação do conjunto eletromecânico.\\
+Componentes metálicos & Elementos móveis, eixo e partes ferromagnéticas.\\
+Tubulações e reservatório & Circulação experimental de água nos encapsulamentos.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Estrutura mecânica e fabricação aditiva}
+
+A montagem adota cinco posições radiais em torno do rotor. A base foi construída em madeira e recebeu componentes metálicos reutilizados. Foram disponibilizadas três malhas STL: suporte da bobina e metades esquerda e direita do encapsulamento. Como o formato STL não registra unidade, as dimensões devem ser confirmadas no software CAD ou fatiador antes da fabricação.
+
+\begin{table}[H]
+\centering
+\caption{Características extraídas das malhas STL.}
+\begin{tabularx}{\textwidth}{Y c c}
+\toprule
+Modelo & Triângulos & Dimensões geométricas X $\times$ Y $\times$ Z\\
+\midrule
+Bobina & 1.804 & 40,00 $\times$ 39,98 $\times$ 80,00\\
+Encapsulamento esquerdo & 766 & 29,00 $\times$ 64,27 $\times$ 80,00\\
+Encapsulamento direito & 766 & 24,00 $\times$ 64,27 $\times$ 80,00\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+As dimensões da Tabela 2 são limites geométricos da malha. As unidades não são codificadas no arquivo e precisam ser confirmadas antes da impressão.
+
+\subsection{Subsistema eletromagnético e resfriamento}
+
+Cada atuador é formado por um enrolamento de fio de cobre esmaltado e um elemento ferromagnético móvel. Os encapsulamentos foram concebidos com passagens para água. A existência desse circuito de circulação é documentada, mas sua contribuição térmica ainda não foi quantificada por comparação de temperaturas, vazões ou tempos de operação.
+
+\begin{figure}[H]
+  \centering
+  \begin{tabular}{cc}
+    \includegraphics[width=0.42\textwidth,height=4.7cm,keepaspectratio]{media/apresentacao-01.jpeg} &
+    \includegraphics[width=0.42\textwidth,height=4.7cm,keepaspectratio]{media/apresentacao-02.jpeg} \\
+    \includegraphics[width=0.42\textwidth,height=4.7cm,keepaspectratio]{media/apresentacao-03.jpeg} &
+    \includegraphics[width=0.42\textwidth,height=4.7cm,keepaspectratio]{media/apresentacao-04.jpeg}
+  \end{tabular}
+  \caption{Registros do protótipo e da apresentação acadêmica.}
+  \source{Acervo da equipe.}
+\end{figure}
+
+\subsection{Eletrônica e pinagem}
+
+\begin{table}[H]
+\centering
+\caption{Mapeamentos definidos no firmware.}
+\small
+\begin{tabularx}{\textwidth}{p{2.5cm} >{\centering\arraybackslash}p{2.7cm} >{\centering\arraybackslash}p{2.7cm} Y}
+\toprule
+Canal lógico & GPIO no modo 1 & GPIO no modo 2 & Função\\
+\midrule
+Bobina 0 & 14 & 17 & Primeiro atuador da sequência\\
+Bobina 1 & 17 & 25 & Segundo atuador da sequência\\
+Bobina 2 & 27 & 14 & Terceiro atuador da sequência\\
+Bobina 3 & 25 & 16 & Quarto atuador da sequência\\
+Bobina 4 & 16 & 27 & Quinto atuador da sequência\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\warningbox{O circuito completo do Tinkercad depende de autenticação para inspeção. A documentação disponível ainda não confirma tensão da fonte, resistência das bobinas, corrente por canal, ligação do terminal COM ou capacidade térmica do driver.}
+
+\subsection{Programação do sistema de controle}
+
+\subsubsection{Organização geral}
+
+O firmware foi organizado em módulos para variáveis, sequenciamento e comunicação Wi-Fi. As credenciais de rede foram removidas do código versionado e substituídas por um arquivo local ignorado pelo Git. Uma tarefa FreeRTOS fixada ao segundo núcleo consulta periodicamente o comando remoto, enquanto o laço principal executa a sequência eletromagnética.
+
+\subsubsection{Teste de inicialização}
+
+Antes da rotina principal, as cinco saídas são acionadas individualmente. Essa etapa permite verificar a resposta de cada canal, mas deve ser executada com alimentação limitada e possibilidade de desligamento imediato.
+
+\subsubsection{Sequência e aceleração}
+
+A posição lógica seguinte é obtida por aritmética modular, fazendo a sequência retornar ao início após a quinta bobina. O intervalo entre passos parte de aproximadamente 800 ms e decresce exponencialmente em direção a 100 ms, com constante temporal configurada em 40 s. O número apresentado como RPM no monitor serial é uma estimativa baseada em uma relação assumida entre passos e revolução; não substitui medição por tacômetro.
+
+\begin{table}[H]
+\centering
+\caption{Modos de sequência do firmware revisado.}
+\begin{tabularx}{0.78\textwidth}{c Y c}
+\toprule
+Modo & Ordem dos GPIOs & Compilação\\
+\midrule
+1 & 14, 17, 27, 25, 16 & Aprovada\\
+2 & 17, 25, 14, 16, 27 & Aprovada\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Comando remoto}
+
+O ESP32 realiza uma requisição HTTP ao arquivo \texttt{commands.txt} hospedado no GitHub. Quando recebe o texto \texttt{MOTOR\_ON}, habilita o funcionamento; qualquer outro conteúdo desabilita o acionamento. Essa solução é adequada à demonstração, mas não oferece autenticação própria, resposta em tempo real garantida ou proteção contra indisponibilidade da rede.
+
+\section{TESTES E VERIFICAÇÕES}
+
+\subsection{Verificação de software}
+
+A versão sanitizada foi compilada com Arduino CLI 1.5.1 para o alvo ESP32 Dev Module, usando o núcleo oficial Espressif \texttt{esp32:esp32} 3.3.11. Os dois modos de pinagem compilaram sem erro.
+
+\begin{table}[H]
+\centering
+\caption{Resultado da compilação do firmware.}
+\begin{tabularx}{0.88\textwidth}{p{3cm} Y Y}
+\toprule
+Configuração & Programa & Memória global\\
+\midrule
+Modo 1 & 1.022.916 bytes (78\%) & 48.504 bytes (14\%)\\
+Modo 2 & 1.022.920 bytes (78\%) & 48.504 bytes (14\%)\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Esse ensaio verifica a consistência do software e das dependências de compilação. Ele não comprova o comportamento elétrico do protótipo.
+
+\subsection{Testes documentados}
+
+Os materiais fornecidos incluem registros da apresentação, vídeos do motor e testes das bobinas. Esses registros permitem documentar a construção e a ocorrência de resposta eletromecânica. Não foram disponibilizados arquivos de aquisição de dados ou instrumentos de medição associados aos testes.
+
+\subsection{Procedimento recomendado para ensaios futuros}
+
+\begin{enumerate}[leftmargin=1.4cm]
+  \item medir resistência e continuidade de cada bobina com o sistema desligado;
+  \item energizar um canal por vez com fonte limitada em corrente;
+  \item registrar tensão, corrente e temperatura em intervalos definidos;
+  \item verificar a ordem física das bobinas em baixa velocidade;
+  \item medir RPM com sensor óptico ou Hall;
+  \item repetir o ensaio térmico com circulação desligada e ligada;
+  \item registrar vazão, temperatura ambiente e tempo de operação;
+  \item interromper imediatamente o teste diante de aquecimento, vazamento ou travamento.
+\end{enumerate}
+
+\section{RESULTADOS E DISCUSSÃO}
+
+\subsection{Evidências disponíveis}
+
+As fotografias e os vídeos disponibilizados registram o protótipo, a apresentação e demonstrações associadas ao motor e às bobinas. O material sustenta a conclusão qualitativa de que o conjunto foi construído e apresentado e de que houve resposta eletromecânica durante os testes. O firmware disponível também documenta o acionamento das cinco saídas e a lógica de habilitação remota.
+
+\subsection{Limites das conclusões}
+
+\begin{longtable}{p{2.6cm}p{5.0cm}p{7.0cm}}
+\caption{Separação entre evidência disponível e caracterização pendente.}\\
+\toprule
+\textbf{Aspecto} & \textbf{O que está documentado} & \textbf{O que ainda deve ser medido}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Aspecto} & \textbf{O que está documentado} & \textbf{O que ainda deve ser medido}\\
+\midrule
+\endhead
+Movimento & Observação audiovisual & RPM real, estabilidade e faixa operacional\\
+Atuação & Teste sequencial de cinco saídas & Corrente, força e repetibilidade por bobina\\
+Térmica & Encapsulamento com circulação de água & Temperatura, vazão e comparação com e sem fluxo\\
+Desempenho & Protótipo funcional em demonstração & Torque, potência mecânica, rendimento e autonomia\\
+Controle remoto & Consulta HTTP ao GitHub & Latência, falhas de rede e segurança\\
+\bottomrule
+\end{longtable}
+
+\warningbox{Sem dados instrumentais, não é possível afirmar ganho de eficiência, redução mensurável de temperatura ou controle preciso de velocidade. Essas afirmações foram retiradas da conclusão para preservar a validade acadêmica do relatório.}
+
+\subsection{Relevância acadêmica}
+
+O protótipo integra conceitos de eletromagnetismo, eletrônica de potência, sistemas embarcados, programação concorrente, fabricação aditiva e segurança experimental. As limitações encontradas não anulam seu valor didático; ao contrário, definem problemas concretos de dimensionamento e instrumentação para uma próxima etapa.
+
+\section{SUSTENTABILIDADE E SEGURANÇA}
+
+\subsection{Reaproveitamento de materiais}
+
+A base de madeira e os componentes metálicos reaproveitados reduziram a necessidade de aquisição de material novo. A fabricação aditiva também permitiu produzir geometrias específicas para o protótipo. Uma avaliação ambiental completa, contudo, exigiria contabilizar massa de material, consumo de impressão, descarte e possibilidade de reutilização.
+
+\subsection{Cuidados para novos ensaios}
+
+\begin{itemize}
+  \item usar fonte com limitação de corrente e proteção adequada;
+  \item confirmar a corrente máxima das bobinas e a dissipação admissível do ULN2003;
+  \item garantir aterramento comum e diodos de roda livre corretamente conectados;
+  \item manter água e conexões hidráulicas isoladas da eletrônica;
+  \item monitorar a temperatura dos enrolamentos e do driver;
+  \item prever desligamento imediato e impedir contato com partes móveis;
+  \item não operar o motor sem supervisão enquanto os limites não forem caracterizados.
+\end{itemize}
+
+\section{PROPOSTAS DE OTIMIZAÇÃO E EVOLUÇÃO}
+
+\begin{itemize}
+  \item medir resistência e indutância de cada bobina;
+  \item registrar tensão e corrente por canal com e sem carga;
+  \item medir RPM por sensor óptico ou Hall e torque por bancada apropriada;
+  \item comparar curvas de temperatura com circulação desligada e ligada;
+  \item documentar vazão, fluido, vedação e pressão do circuito de resfriamento;
+  \item substituir a consulta pública por uma interface autenticada e tolerante a falhas;
+  \item validar esquemático, dimensionamento do driver e modelo exato da placa ESP32;
+  \item preservar o arquivo CAD paramétrico e registrar parâmetros de impressão.
+\end{itemize}
+
+\section{CONCLUSÃO}
+
+O projeto atingiu seu propósito didático ao integrar uma montagem mecânica radial, cinco atuadores eletromagnéticos, fabricação aditiva, controle por ESP32 e comunicação em rede. O protótipo e seus registros demonstram a realização prática da proposta e oferecem uma plataforma concreta para estudo de comutação, eletromagnetismo e sistemas embarcados.
+
+A principal contribuição desta revisão é tornar explícita a diferença entre funcionamento observado e desempenho medido. A compilação do firmware foi verificada, mas as grandezas elétricas, mecânicas e térmicas permanecem sem caracterização quantitativa. A continuidade do trabalho deve priorizar esses ensaios e a segurança do estágio de potência.
+
+Com a documentação do código, das malhas STL e das limitações atuais, o projeto passa a contar com uma base mais reproduzível e tecnicamente defensável para aperfeiçoamentos futuros.
+
+\clearpage
+\phantomsection\addcontentsline{toc}{section}{Referências}
+\begin{thebibliography}{99}
+\bibitem{chapman} CHAPMAN, Stephen J. \textit{Fundamentos de máquinas elétricas}. 5. ed. Porto Alegre: AMGH, 2013.
+
+\bibitem{espressif} ESPRESSIF SYSTEMS. \textit{ESP32 Series Datasheet}. Documentação técnica do fabricante. Disponível em: \url{https://www.espressif.com/en/support/documents/technical-documents}. Acesso em: 27 ago. 2026.
+
+\bibitem{fitzgerald} FITZGERALD, A. E.; KINGSLEY JR., C.; UMANS, S. D. \textit{Máquinas elétricas}. 7. ed. Porto Alegre: Bookman, 2014.
+
+\bibitem{halliday} HALLIDAY, D.; RESNICK, R.; WALKER, J. \textit{Fundamentos de física}. v. 3. Rio de Janeiro: LTC, 2016.
+
+\bibitem{fiat} MLWATTS. \textit{Fiat A.50 radial engine front view}. Wikimedia Commons, 2012. Licença CC BY-SA 3.0. Disponível em: \url{https://commons.wikimedia.org/wiki/File:Fiat_A.50_radial_engine_front_view.JPG}. Acesso em: 27 ago. 2026.
+
+\bibitem{solenoide} NOGUEIRA, Nuno. \textit{Solenoid Rotated}. Wikimedia Commons, 2009. Domínio público. Disponível em: \url{https://commons.wikimedia.org/wiki/File:Solenoid_Rotated.svg}. Acesso em: 27 ago. 2026.
+
+\bibitem{sedra} SEDRA, A. S.; SMITH, K. C. \textit{Microeletrônica}. 7. ed. São Paulo: Pearson, 2015.
+
+\bibitem{tiuln} TEXAS INSTRUMENTS. \textit{ULN200x, ULQ200x High-Voltage, High-Current Darlington Transistor Arrays}. Datasheet. Disponível em: \url{https://www.ti.com/lit/ds/symlink/uln2003a.pdf}. Acesso em: 27 ago. 2026.
+\end{thebibliography}
+
+\clearpage
+\section*{APÊNDICE A - REPOSITÓRIO E MATERIAIS}
+\addcontentsline{toc}{section}{Apêndice A - Repositório e materiais}
+
+\noindent\textbf{Repositório do projeto:}\\
+\href{https://github.com/artartoliveira2006-boop/Remote-Control-Radial-Electric-Motor}{GitHub - Remote-Control-Radial-Electric-Motor}
+
+\noindent\textbf{Sketch de origem:}\\
+\href{https://app.arduino.cc/sketches/5fc2e5a7-c3c3-415b-b562-e2339e4dc90b?view-mode=preview}{Arduino Cloud - MotorRadial}
+
+\noindent\textbf{Circuito compartilhado:}\\
+\href{https://www.tinkercad.com/things/hriccYSg3r2-dazzling-gaaris-fulffy}{Tinkercad - circuito compartilhado}
+
+O repositório preserva o firmware sanitizado, arquivos STL, fotografias, vídeos e documentação complementar. Credenciais de rede não fazem parte dos arquivos versionados.
+
+\end{document}
